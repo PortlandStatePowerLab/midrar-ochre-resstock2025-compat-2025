@@ -80,16 +80,6 @@ def download_files (filtered_data):
     
     return main_path
 
-# def check_dir (main_path):
-#     print(len(os.listdir(main_path)))
-#     root = Path(main_path)
-#     for f in root.rglob('in.schedules.csv'):
-        
-#         if f.is_file():
-#             print(len(os.listdir(main_path)))
-#         else:
-#             print(f)
-
 if __name__ == '__main__':
     
     metadata = './OR_upgrade0.csv'
