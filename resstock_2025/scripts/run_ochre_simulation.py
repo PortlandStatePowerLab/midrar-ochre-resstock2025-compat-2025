@@ -28,14 +28,14 @@ for input_path in input_paths:
 
 
     dwelling = create_dwelling (
-                input_path=str(input_file),
-                start_year=2025,
-                start_month=1,
-                start_day=1,
-                initialization_time=1,
-                time_res= 60,
-                duration= 1,
-                weather_file_or_path=str(default_weather_file),
-                # output_path=output_dir,
-            )
+        input_path=str(input_file),
+        start_year=2025,
+        start_month=1,
+        start_day=1,
+        initialization_time=1,
+        time_res= 60,
+        duration= 1,
+        weather_file_or_path=str(default_weather_file),
+        # output_path=output_dir,
+        )
     dwelling.simulate()
