@@ -66,7 +66,7 @@ def download_files (filtered_data):
     # Read the filtered data
     # df = pd.read_csv(filtered_data,usecols=['bldg_id'])
     building_ids = filtered_data['bldg_id'].to_list()
-    upgrades = ["up00"]
+    upgrades = ["up00", "up01"]
 
     i = 0
     for building in building_ids:
@@ -85,7 +85,7 @@ def download_files (filtered_data):
 
 if __name__ == '__main__':
     
-    metadata = './OR_upgrade0.csv'
+    metadata = './OR_upgrade1.csv'
     df = process_metdata(original_data=metadata)
     df = df.drop('index', axis=1)
     main_path = download_files(filtered_data=df)

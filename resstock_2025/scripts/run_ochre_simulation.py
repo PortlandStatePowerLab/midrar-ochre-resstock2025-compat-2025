@@ -3,6 +3,8 @@ from pathlib import Path
 from ochre.cli import create_dwelling
 from ochre.utils import default_input_path
 
+print(default_input_path)
+quit()
 
 def _filter_datasets (input_path):
     target_file = input_path / 'in.schedules.csv'
