@@ -54,7 +54,7 @@ def create_dir():
     # Root exposes the current directory (where this script lives)
     root = Path (__file__).resolve().parent
     # main_path is the directory where the load profiles live
-    main_path = root.parent / 'load_profiles' / 'cosimulation'
+    main_path = root.parent / 'load_profiles' / 'cosimulation2'
     # Create the directories if they don't exist
     main_path.mkdir(parents=True, exist_ok=True)
     return main_path
@@ -66,7 +66,7 @@ def download_files (filtered_data):
     # Read the filtered data
     # df = pd.read_csv(filtered_data,usecols=['bldg_id'])
     building_ids = filtered_data['bldg_id'].to_list()
-    upgrades = ["up00", "up01"]
+    upgrades = ["up00"]
 
     i = 0
     for building in building_ids:
@@ -85,7 +85,7 @@ def download_files (filtered_data):
 
 if __name__ == '__main__':
     
-    metadata = './OR_upgrade1.csv'
+    metadata = './OR_upgrade0.csv'
     df = process_metdata(original_data=metadata)
     df = df.drop('index', axis=1)
     main_path = download_files(filtered_data=df)
