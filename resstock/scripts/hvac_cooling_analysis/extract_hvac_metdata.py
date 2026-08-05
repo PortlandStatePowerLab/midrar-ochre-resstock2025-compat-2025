@@ -1,7 +1,8 @@
-'''
+"""
 Author: Midrar Adham
 Created: Thu Jul 23 2026
-'''
+"""
+
 """
 02_extract_hvac_metadata.py
 
@@ -28,10 +29,10 @@ This script does not modify any simulation files.
 """
 
 import json
-import pandas as pd
-from pathlib import Path
 import xml.etree.ElementTree as et
+from pathlib import Path
 
+import pandas as pd
 
 # ---------------------------------------------------------------------------
 # User settings
@@ -53,6 +54,7 @@ upgrades = ["up00", "up01", "up02"]
 # ---------------------------------------------------------------------------
 # Unit conversions
 # ---------------------------------------------------------------------------
+
 
 def btuh_to_tons(value):
     """
@@ -100,6 +102,7 @@ def watts_to_kw(value):
 # ---------------------------------------------------------------------------
 # General helpers
 # ---------------------------------------------------------------------------
+
 
 def clean_text(value):
     """
@@ -215,6 +218,7 @@ def get_system_identifier(element):
 # home.xml extraction
 # ---------------------------------------------------------------------------
 
+
 def classify_hpxml_equipment(element_type, equipment_type, fuel):
     """
     Create a simple analysis class for HVAC equipment.
@@ -257,33 +261,41 @@ def extract_hpxml_heating_systems(root, building_id, upgrade, source_file):
         fuel = child_text(element, "HeatingSystemFuel")
         capacity_btuh = to_float(child_text(element, "HeatingCapacity"))
 
-        rows.append({
-            "building_id": building_id,
-            "upgrade": upgrade,
-            "source": "home_xml",
-            "source_file": str(source_file),
-            "element_type": "HeatingSystem",
-            "system_identifier": get_system_identifier(element),
-            "equipment_type": equipment_type,
-            "fuel": fuel,
-            "heating_capacity_btuh": capacity_btuh,
-            "heating_capacity_tons": btuh_to_tons(capacity_btuh),
-            "heating_capacity_kw_thermal": btuh_to_kw_thermal(capacity_btuh),
-            "cooling_capacity_btuh": None,
-            "cooling_capacity_tons": None,
-            "cooling_capacity_kw_thermal": None,
-            "backup_fuel": None,
-            "backup_system_type": None,
-            "backup_heating_capacity_btuh": None,
-            "backup_heating_capacity_tons": None,
-            "backup_heating_capacity_kw_thermal": None,
-            "compressor_type": None,
-            "annual_heating_efficiency_type": descendant_text(element, "AnnualHeatingEfficiencyUnits"),
-            "annual_heating_efficiency_value": to_float(descendant_text(element, "AnnualHeatingEfficiencyValue")),
-            "annual_cooling_efficiency_type": None,
-            "annual_cooling_efficiency_value": None,
-            "analysis_class": classify_hpxml_equipment("HeatingSystem", equipment_type, fuel),
-        })
+        rows.append(
+            {
+                "building_id": building_id,
+                "upgrade": upgrade,
+                "source": "home_xml",
+                "source_file": str(source_file),
+                "element_type": "HeatingSystem",
+                "system_identifier": get_system_identifier(element),
+                "equipment_type": equipment_type,
+                "fuel": fuel,
+                "heating_capacity_btuh": capacity_btuh,
+                "heating_capacity_tons": btuh_to_tons(capacity_btuh),
+                "heating_capacity_kw_thermal": btuh_to_kw_thermal(capacity_btuh),
+                "cooling_capacity_btuh": None,
+                "cooling_capacity_tons": None,
+                "cooling_capacity_kw_thermal": None,
+                "backup_fuel": None,
+                "backup_system_type": None,
+                "backup_heating_capacity_btuh": None,
+                "backup_heating_capacity_tons": None,
+                "backup_heating_capacity_kw_thermal": None,
+                "compressor_type": None,
+                "annual_heating_efficiency_type": descendant_text(
+                    element, "AnnualHeatingEfficiencyUnits"
+                ),
+                "annual_heating_efficiency_value": to_float(
+                    descendant_text(element, "AnnualHeatingEfficiencyValue")
+                ),
+                "annual_cooling_efficiency_type": None,
+                "annual_cooling_efficiency_value": None,
+                "analysis_class": classify_hpxml_equipment(
+                    "HeatingSystem", equipment_type, fuel
+                ),
+            }
+        )
 
     return rows
 
@@ -299,33 +311,41 @@ def extract_hpxml_cooling_systems(root, building_id, upgrade, source_file):
         fuel = child_text(element, "CoolingSystemFuel")
         capacity_btuh = to_float(child_text(element, "CoolingCapacity"))
 
-        rows.append({
-            "building_id": building_id,
-            "upgrade": upgrade,
-            "source": "home_xml",
-            "source_file": str(source_file),
-            "element_type": "CoolingSystem",
-            "system_identifier": get_system_identifier(element),
-            "equipment_type": equipment_type,
-            "fuel": fuel,
-            "heating_capacity_btuh": None,
-            "heating_capacity_tons": None,
-            "heating_capacity_kw_thermal": None,
-            "cooling_capacity_btuh": capacity_btuh,
-            "cooling_capacity_tons": btuh_to_tons(capacity_btuh),
-            "cooling_capacity_kw_thermal": btuh_to_kw_thermal(capacity_btuh),
-            "backup_fuel": None,
-            "backup_system_type": None,
-            "backup_heating_capacity_btuh": None,
-            "backup_heating_capacity_tons": None,
-            "backup_heating_capacity_kw_thermal": None,
-            "compressor_type": None,
-            "annual_heating_efficiency_type": None,
-            "annual_heating_efficiency_value": None,
-            "annual_cooling_efficiency_type": descendant_text(element, "AnnualCoolingEfficiencyUnits"),
-            "annual_cooling_efficiency_value": to_float(descendant_text(element, "AnnualCoolingEfficiencyValue")),
-            "analysis_class": classify_hpxml_equipment("CoolingSystem", equipment_type, fuel),
-        })
+        rows.append(
+            {
+                "building_id": building_id,
+                "upgrade": upgrade,
+                "source": "home_xml",
+                "source_file": str(source_file),
+                "element_type": "CoolingSystem",
+                "system_identifier": get_system_identifier(element),
+                "equipment_type": equipment_type,
+                "fuel": fuel,
+                "heating_capacity_btuh": None,
+                "heating_capacity_tons": None,
+                "heating_capacity_kw_thermal": None,
+                "cooling_capacity_btuh": capacity_btuh,
+                "cooling_capacity_tons": btuh_to_tons(capacity_btuh),
+                "cooling_capacity_kw_thermal": btuh_to_kw_thermal(capacity_btuh),
+                "backup_fuel": None,
+                "backup_system_type": None,
+                "backup_heating_capacity_btuh": None,
+                "backup_heating_capacity_tons": None,
+                "backup_heating_capacity_kw_thermal": None,
+                "compressor_type": None,
+                "annual_heating_efficiency_type": None,
+                "annual_heating_efficiency_value": None,
+                "annual_cooling_efficiency_type": descendant_text(
+                    element, "AnnualCoolingEfficiencyUnits"
+                ),
+                "annual_cooling_efficiency_value": to_float(
+                    descendant_text(element, "AnnualCoolingEfficiencyValue")
+                ),
+                "analysis_class": classify_hpxml_equipment(
+                    "CoolingSystem", equipment_type, fuel
+                ),
+            }
+        )
 
     return rows
 
@@ -344,38 +364,60 @@ def extract_hpxml_heat_pumps(root, building_id, upgrade, source_file):
 
         heating_capacity_btuh = to_float(child_text(element, "HeatingCapacity"))
         cooling_capacity_btuh = to_float(child_text(element, "CoolingCapacity"))
-        backup_heating_capacity_btuh = to_float(child_text(element, "BackupHeatingCapacity"))
+        backup_heating_capacity_btuh = to_float(
+            child_text(element, "BackupHeatingCapacity")
+        )
 
         backup_fuel = child_text(element, "BackupHeatingFuel")
         backup_system_type = child_text(element, "BackupSystemType")
 
-        rows.append({
-            "building_id": building_id,
-            "upgrade": upgrade,
-            "source": "home_xml",
-            "source_file": str(source_file),
-            "element_type": "HeatPump",
-            "system_identifier": get_system_identifier(element),
-            "equipment_type": equipment_type,
-            "fuel": fuel,
-            "heating_capacity_btuh": heating_capacity_btuh,
-            "heating_capacity_tons": btuh_to_tons(heating_capacity_btuh),
-            "heating_capacity_kw_thermal": btuh_to_kw_thermal(heating_capacity_btuh),
-            "cooling_capacity_btuh": cooling_capacity_btuh,
-            "cooling_capacity_tons": btuh_to_tons(cooling_capacity_btuh),
-            "cooling_capacity_kw_thermal": btuh_to_kw_thermal(cooling_capacity_btuh),
-            "backup_fuel": backup_fuel,
-            "backup_system_type": backup_system_type,
-            "backup_heating_capacity_btuh": backup_heating_capacity_btuh,
-            "backup_heating_capacity_tons": btuh_to_tons(backup_heating_capacity_btuh),
-            "backup_heating_capacity_kw_thermal": btuh_to_kw_thermal(backup_heating_capacity_btuh),
-            "compressor_type": child_text(element, "CompressorType"),
-            "annual_heating_efficiency_type": descendant_text(element, "AnnualHeatingEfficiencyUnits"),
-            "annual_heating_efficiency_value": to_float(descendant_text(element, "AnnualHeatingEfficiencyValue")),
-            "annual_cooling_efficiency_type": descendant_text(element, "AnnualCoolingEfficiencyUnits"),
-            "annual_cooling_efficiency_value": to_float(descendant_text(element, "AnnualCoolingEfficiencyValue")),
-            "analysis_class": classify_hpxml_equipment("HeatPump", equipment_type, fuel),
-        })
+        rows.append(
+            {
+                "building_id": building_id,
+                "upgrade": upgrade,
+                "source": "home_xml",
+                "source_file": str(source_file),
+                "element_type": "HeatPump",
+                "system_identifier": get_system_identifier(element),
+                "equipment_type": equipment_type,
+                "fuel": fuel,
+                "heating_capacity_btuh": heating_capacity_btuh,
+                "heating_capacity_tons": btuh_to_tons(heating_capacity_btuh),
+                "heating_capacity_kw_thermal": btuh_to_kw_thermal(
+                    heating_capacity_btuh
+                ),
+                "cooling_capacity_btuh": cooling_capacity_btuh,
+                "cooling_capacity_tons": btuh_to_tons(cooling_capacity_btuh),
+                "cooling_capacity_kw_thermal": btuh_to_kw_thermal(
+                    cooling_capacity_btuh
+                ),
+                "backup_fuel": backup_fuel,
+                "backup_system_type": backup_system_type,
+                "backup_heating_capacity_btuh": backup_heating_capacity_btuh,
+                "backup_heating_capacity_tons": btuh_to_tons(
+                    backup_heating_capacity_btuh
+                ),
+                "backup_heating_capacity_kw_thermal": btuh_to_kw_thermal(
+                    backup_heating_capacity_btuh
+                ),
+                "compressor_type": child_text(element, "CompressorType"),
+                "annual_heating_efficiency_type": descendant_text(
+                    element, "AnnualHeatingEfficiencyUnits"
+                ),
+                "annual_heating_efficiency_value": to_float(
+                    descendant_text(element, "AnnualHeatingEfficiencyValue")
+                ),
+                "annual_cooling_efficiency_type": descendant_text(
+                    element, "AnnualCoolingEfficiencyUnits"
+                ),
+                "annual_cooling_efficiency_value": to_float(
+                    descendant_text(element, "AnnualCoolingEfficiencyValue")
+                ),
+                "analysis_class": classify_hpxml_equipment(
+                    "HeatPump", equipment_type, fuel
+                ),
+            }
+        )
 
     return rows
 
@@ -387,34 +429,36 @@ def extract_home_xml_metadata(home_xml, building_id, upgrade):
     try:
         root = et.parse(home_xml).getroot()
     except Exception as error:
-        return [{
-            "building_id": building_id,
-            "upgrade": upgrade,
-            "source": "home_xml",
-            "source_file": str(home_xml),
-            "element_type": "xml_read_error",
-            "system_identifier": None,
-            "equipment_type": None,
-            "fuel": None,
-            "heating_capacity_btuh": None,
-            "heating_capacity_tons": None,
-            "heating_capacity_kw_thermal": None,
-            "cooling_capacity_btuh": None,
-            "cooling_capacity_tons": None,
-            "cooling_capacity_kw_thermal": None,
-            "backup_fuel": None,
-            "backup_system_type": None,
-            "backup_heating_capacity_btuh": None,
-            "backup_heating_capacity_tons": None,
-            "backup_heating_capacity_kw_thermal": None,
-            "compressor_type": None,
-            "annual_heating_efficiency_type": None,
-            "annual_heating_efficiency_value": None,
-            "annual_cooling_efficiency_type": None,
-            "annual_cooling_efficiency_value": None,
-            "analysis_class": "xml_read_error",
-            "read_error": str(error),
-        }]
+        return [
+            {
+                "building_id": building_id,
+                "upgrade": upgrade,
+                "source": "home_xml",
+                "source_file": str(home_xml),
+                "element_type": "xml_read_error",
+                "system_identifier": None,
+                "equipment_type": None,
+                "fuel": None,
+                "heating_capacity_btuh": None,
+                "heating_capacity_tons": None,
+                "heating_capacity_kw_thermal": None,
+                "cooling_capacity_btuh": None,
+                "cooling_capacity_tons": None,
+                "cooling_capacity_kw_thermal": None,
+                "backup_fuel": None,
+                "backup_system_type": None,
+                "backup_heating_capacity_btuh": None,
+                "backup_heating_capacity_tons": None,
+                "backup_heating_capacity_kw_thermal": None,
+                "compressor_type": None,
+                "annual_heating_efficiency_type": None,
+                "annual_heating_efficiency_value": None,
+                "annual_cooling_efficiency_type": None,
+                "annual_cooling_efficiency_value": None,
+                "analysis_class": "xml_read_error",
+                "read_error": str(error),
+            }
+        ]
 
     rows = []
     rows.extend(extract_hpxml_heating_systems(root, building_id, upgrade, home_xml))
@@ -425,34 +469,36 @@ def extract_home_xml_metadata(home_xml, building_id, upgrade):
         row["read_error"] = None
 
     if not rows:
-        rows.append({
-            "building_id": building_id,
-            "upgrade": upgrade,
-            "source": "home_xml",
-            "source_file": str(home_xml),
-            "element_type": "no_hvac_elements_found",
-            "system_identifier": None,
-            "equipment_type": None,
-            "fuel": None,
-            "heating_capacity_btuh": None,
-            "heating_capacity_tons": None,
-            "heating_capacity_kw_thermal": None,
-            "cooling_capacity_btuh": None,
-            "cooling_capacity_tons": None,
-            "cooling_capacity_kw_thermal": None,
-            "backup_fuel": None,
-            "backup_system_type": None,
-            "backup_heating_capacity_btuh": None,
-            "backup_heating_capacity_tons": None,
-            "backup_heating_capacity_kw_thermal": None,
-            "compressor_type": None,
-            "annual_heating_efficiency_type": None,
-            "annual_heating_efficiency_value": None,
-            "annual_cooling_efficiency_type": None,
-            "annual_cooling_efficiency_value": None,
-            "analysis_class": "no_hvac_elements_found",
-            "read_error": None,
-        })
+        rows.append(
+            {
+                "building_id": building_id,
+                "upgrade": upgrade,
+                "source": "home_xml",
+                "source_file": str(home_xml),
+                "element_type": "no_hvac_elements_found",
+                "system_identifier": None,
+                "equipment_type": None,
+                "fuel": None,
+                "heating_capacity_btuh": None,
+                "heating_capacity_tons": None,
+                "heating_capacity_kw_thermal": None,
+                "cooling_capacity_btuh": None,
+                "cooling_capacity_tons": None,
+                "cooling_capacity_kw_thermal": None,
+                "backup_fuel": None,
+                "backup_system_type": None,
+                "backup_heating_capacity_btuh": None,
+                "backup_heating_capacity_tons": None,
+                "backup_heating_capacity_kw_thermal": None,
+                "compressor_type": None,
+                "annual_heating_efficiency_type": None,
+                "annual_heating_efficiency_value": None,
+                "annual_cooling_efficiency_type": None,
+                "annual_cooling_efficiency_value": None,
+                "analysis_class": "no_hvac_elements_found",
+                "read_error": None,
+            }
+        )
 
     return rows
 
@@ -460,6 +506,7 @@ def extract_home_xml_metadata(home_xml, building_id, upgrade):
 # ---------------------------------------------------------------------------
 # ochre.json extraction
 # ---------------------------------------------------------------------------
+
 
 def flatten_dict(value, prefix=""):
     """
@@ -495,7 +542,12 @@ def find_equipment_dicts(value, path=""):
     if isinstance(value, dict):
         text = " ".join([path] + [str(key) for key in value.keys()]).lower()
 
-        if "hvac" in text or "heat pump" in text or "heating" in text or "cooling" in text:
+        if (
+            "hvac" in text
+            or "heat pump" in text
+            or "heating" in text
+            or "cooling" in text
+        ):
             matches.append((path, value))
 
         for key, item in value.items():
@@ -517,8 +569,7 @@ def get_first_by_possible_keys(flattened, possible_names):
     The match is case-insensitive and ignores spaces/underscores.
     """
     normalized_possible = [
-        name.lower().replace(" ", "").replace("_", "")
-        for name in possible_names
+        name.lower().replace(" ", "").replace("_", "") for name in possible_names
     ]
 
     for key, value in flattened.items():
@@ -541,34 +592,36 @@ def extract_ochre_json_metadata(ochre_json, building_id, upgrade):
         with open(ochre_json, "r", encoding="utf-8") as file:
             data = json.load(file)
     except Exception as error:
-        return [{
-            "building_id": building_id,
-            "upgrade": upgrade,
-            "source": "ochre_json",
-            "source_file": str(ochre_json),
-            "element_type": "json_read_error",
-            "system_identifier": None,
-            "equipment_type": None,
-            "fuel": None,
-            "heating_capacity_btuh": None,
-            "heating_capacity_tons": None,
-            "heating_capacity_kw_thermal": None,
-            "cooling_capacity_btuh": None,
-            "cooling_capacity_tons": None,
-            "cooling_capacity_kw_thermal": None,
-            "backup_fuel": None,
-            "backup_system_type": None,
-            "backup_heating_capacity_btuh": None,
-            "backup_heating_capacity_tons": None,
-            "backup_heating_capacity_kw_thermal": None,
-            "compressor_type": None,
-            "annual_heating_efficiency_type": None,
-            "annual_heating_efficiency_value": None,
-            "annual_cooling_efficiency_type": None,
-            "annual_cooling_efficiency_value": None,
-            "analysis_class": "json_read_error",
-            "read_error": str(error),
-        }]
+        return [
+            {
+                "building_id": building_id,
+                "upgrade": upgrade,
+                "source": "ochre_json",
+                "source_file": str(ochre_json),
+                "element_type": "json_read_error",
+                "system_identifier": None,
+                "equipment_type": None,
+                "fuel": None,
+                "heating_capacity_btuh": None,
+                "heating_capacity_tons": None,
+                "heating_capacity_kw_thermal": None,
+                "cooling_capacity_btuh": None,
+                "cooling_capacity_tons": None,
+                "cooling_capacity_kw_thermal": None,
+                "backup_fuel": None,
+                "backup_system_type": None,
+                "backup_heating_capacity_btuh": None,
+                "backup_heating_capacity_tons": None,
+                "backup_heating_capacity_kw_thermal": None,
+                "compressor_type": None,
+                "annual_heating_efficiency_type": None,
+                "annual_heating_efficiency_value": None,
+                "annual_cooling_efficiency_type": None,
+                "annual_cooling_efficiency_value": None,
+                "analysis_class": "json_read_error",
+                "read_error": str(error),
+            }
+        ]
 
     equipment_matches = find_equipment_dicts(data)
     rows = []
@@ -578,88 +631,99 @@ def extract_ochre_json_metadata(ochre_json, building_id, upgrade):
 
         equipment_name = path.split(".")[-1] if path else None
 
-        capacity_w = to_float(get_first_by_possible_keys(
-            flattened,
-            ["Capacity (W)", "Capacity", "capacity_w"]
-        ))
+        capacity_w = to_float(
+            get_first_by_possible_keys(
+                flattened, ["Capacity (W)", "Capacity", "capacity_w"]
+            )
+        )
 
-        backup_capacity_w = to_float(get_first_by_possible_keys(
-            flattened,
-            ["Backup Capacity (W)", "Backup Capacity", "backup_capacity_w"]
-        ))
+        backup_capacity_w = to_float(
+            get_first_by_possible_keys(
+                flattened,
+                ["Backup Capacity (W)", "Backup Capacity", "backup_capacity_w"],
+            )
+        )
 
-        eir = to_float(get_first_by_possible_keys(
-            flattened,
-            ["EIR (-)", "EIR", "eir"]
-        ))
+        eir = to_float(get_first_by_possible_keys(flattened, ["EIR (-)", "EIR", "eir"]))
 
-        backup_eir = to_float(get_first_by_possible_keys(
-            flattened,
-            ["Backup EIR (-)", "Backup EIR", "backup_eir"]
-        ))
+        backup_eir = to_float(
+            get_first_by_possible_keys(
+                flattened, ["Backup EIR (-)", "Backup EIR", "backup_eir"]
+            )
+        )
 
-        rows.append({
-            "building_id": building_id,
-            "upgrade": upgrade,
-            "source": "ochre_json",
-            "source_file": str(ochre_json),
-            "element_type": "OCHRE equipment",
-            "system_identifier": path,
-            "equipment_type": equipment_name,
-            "fuel": get_first_by_possible_keys(flattened, ["Fuel", "fuel"]),
-            "heating_capacity_btuh": None,
-            "heating_capacity_tons": None,
-            "heating_capacity_kw_thermal": watts_to_kw(capacity_w),
-            "cooling_capacity_btuh": None,
-            "cooling_capacity_tons": None,
-            "cooling_capacity_kw_thermal": None,
-            "backup_fuel": get_first_by_possible_keys(flattened, ["Backup Fuel", "backup_fuel"]),
-            "backup_system_type": get_first_by_possible_keys(flattened, ["Backup System Type", "backup_system_type"]),
-            "backup_heating_capacity_btuh": None,
-            "backup_heating_capacity_tons": None,
-            "backup_heating_capacity_kw_thermal": watts_to_kw(backup_capacity_w),
-            "compressor_type": get_first_by_possible_keys(flattened, ["Compressor Type", "compressor_type"]),
-            "annual_heating_efficiency_type": None,
-            "annual_heating_efficiency_value": eir,
-            "annual_cooling_efficiency_type": None,
-            "annual_cooling_efficiency_value": None,
-            "analysis_class": "ochre_json_equipment",
-            "read_error": None,
-            "ochre_capacity_w": capacity_w,
-            "ochre_eir": eir,
-            "ochre_backup_capacity_w": backup_capacity_w,
-            "ochre_backup_eir": backup_eir,
-        })
+        rows.append(
+            {
+                "building_id": building_id,
+                "upgrade": upgrade,
+                "source": "ochre_json",
+                "source_file": str(ochre_json),
+                "element_type": "OCHRE equipment",
+                "system_identifier": path,
+                "equipment_type": equipment_name,
+                "fuel": get_first_by_possible_keys(flattened, ["Fuel", "fuel"]),
+                "heating_capacity_btuh": None,
+                "heating_capacity_tons": None,
+                "heating_capacity_kw_thermal": watts_to_kw(capacity_w),
+                "cooling_capacity_btuh": None,
+                "cooling_capacity_tons": None,
+                "cooling_capacity_kw_thermal": None,
+                "backup_fuel": get_first_by_possible_keys(
+                    flattened, ["Backup Fuel", "backup_fuel"]
+                ),
+                "backup_system_type": get_first_by_possible_keys(
+                    flattened, ["Backup System Type", "backup_system_type"]
+                ),
+                "backup_heating_capacity_btuh": None,
+                "backup_heating_capacity_tons": None,
+                "backup_heating_capacity_kw_thermal": watts_to_kw(backup_capacity_w),
+                "compressor_type": get_first_by_possible_keys(
+                    flattened, ["Compressor Type", "compressor_type"]
+                ),
+                "annual_heating_efficiency_type": None,
+                "annual_heating_efficiency_value": eir,
+                "annual_cooling_efficiency_type": None,
+                "annual_cooling_efficiency_value": None,
+                "analysis_class": "ochre_json_equipment",
+                "read_error": None,
+                "ochre_capacity_w": capacity_w,
+                "ochre_eir": eir,
+                "ochre_backup_capacity_w": backup_capacity_w,
+                "ochre_backup_eir": backup_eir,
+            }
+        )
 
     if not rows:
-        rows.append({
-            "building_id": building_id,
-            "upgrade": upgrade,
-            "source": "ochre_json",
-            "source_file": str(ochre_json),
-            "element_type": "no_hvac_json_entries_found",
-            "system_identifier": None,
-            "equipment_type": None,
-            "fuel": None,
-            "heating_capacity_btuh": None,
-            "heating_capacity_tons": None,
-            "heating_capacity_kw_thermal": None,
-            "cooling_capacity_btuh": None,
-            "cooling_capacity_tons": None,
-            "cooling_capacity_kw_thermal": None,
-            "backup_fuel": None,
-            "backup_system_type": None,
-            "backup_heating_capacity_btuh": None,
-            "backup_heating_capacity_tons": None,
-            "backup_heating_capacity_kw_thermal": None,
-            "compressor_type": None,
-            "annual_heating_efficiency_type": None,
-            "annual_heating_efficiency_value": None,
-            "annual_cooling_efficiency_type": None,
-            "annual_cooling_efficiency_value": None,
-            "analysis_class": "no_hvac_json_entries_found",
-            "read_error": None,
-        })
+        rows.append(
+            {
+                "building_id": building_id,
+                "upgrade": upgrade,
+                "source": "ochre_json",
+                "source_file": str(ochre_json),
+                "element_type": "no_hvac_json_entries_found",
+                "system_identifier": None,
+                "equipment_type": None,
+                "fuel": None,
+                "heating_capacity_btuh": None,
+                "heating_capacity_tons": None,
+                "heating_capacity_kw_thermal": None,
+                "cooling_capacity_btuh": None,
+                "cooling_capacity_tons": None,
+                "cooling_capacity_kw_thermal": None,
+                "backup_fuel": None,
+                "backup_system_type": None,
+                "backup_heating_capacity_btuh": None,
+                "backup_heating_capacity_tons": None,
+                "backup_heating_capacity_kw_thermal": None,
+                "compressor_type": None,
+                "annual_heating_efficiency_type": None,
+                "annual_heating_efficiency_value": None,
+                "annual_cooling_efficiency_type": None,
+                "annual_cooling_efficiency_value": None,
+                "analysis_class": "no_hvac_json_entries_found",
+                "read_error": None,
+            }
+        )
 
     return rows
 
@@ -667,6 +731,7 @@ def extract_ochre_json_metadata(ochre_json, building_id, upgrade):
 # ---------------------------------------------------------------------------
 # Main script
 # ---------------------------------------------------------------------------
+
 
 def main():
     """
@@ -699,66 +764,70 @@ def main():
         if home_xml.is_file():
             rows.extend(extract_home_xml_metadata(home_xml, building_id, upgrade))
         else:
-            rows.append({
-                "building_id": building_id,
-                "upgrade": upgrade,
-                "source": "home_xml",
-                "source_file": str(home_xml),
-                "element_type": "missing_home_xml",
-                "system_identifier": None,
-                "equipment_type": None,
-                "fuel": None,
-                "heating_capacity_btuh": None,
-                "heating_capacity_tons": None,
-                "heating_capacity_kw_thermal": None,
-                "cooling_capacity_btuh": None,
-                "cooling_capacity_tons": None,
-                "cooling_capacity_kw_thermal": None,
-                "backup_fuel": None,
-                "backup_system_type": None,
-                "backup_heating_capacity_btuh": None,
-                "backup_heating_capacity_tons": None,
-                "backup_heating_capacity_kw_thermal": None,
-                "compressor_type": None,
-                "annual_heating_efficiency_type": None,
-                "annual_heating_efficiency_value": None,
-                "annual_cooling_efficiency_type": None,
-                "annual_cooling_efficiency_value": None,
-                "analysis_class": "missing_home_xml",
-                "read_error": None,
-            })
+            rows.append(
+                {
+                    "building_id": building_id,
+                    "upgrade": upgrade,
+                    "source": "home_xml",
+                    "source_file": str(home_xml),
+                    "element_type": "missing_home_xml",
+                    "system_identifier": None,
+                    "equipment_type": None,
+                    "fuel": None,
+                    "heating_capacity_btuh": None,
+                    "heating_capacity_tons": None,
+                    "heating_capacity_kw_thermal": None,
+                    "cooling_capacity_btuh": None,
+                    "cooling_capacity_tons": None,
+                    "cooling_capacity_kw_thermal": None,
+                    "backup_fuel": None,
+                    "backup_system_type": None,
+                    "backup_heating_capacity_btuh": None,
+                    "backup_heating_capacity_tons": None,
+                    "backup_heating_capacity_kw_thermal": None,
+                    "compressor_type": None,
+                    "annual_heating_efficiency_type": None,
+                    "annual_heating_efficiency_value": None,
+                    "annual_cooling_efficiency_type": None,
+                    "annual_cooling_efficiency_value": None,
+                    "analysis_class": "missing_home_xml",
+                    "read_error": None,
+                }
+            )
 
         if ochre_json.is_file():
             rows.extend(extract_ochre_json_metadata(ochre_json, building_id, upgrade))
         else:
-            rows.append({
-                "building_id": building_id,
-                "upgrade": upgrade,
-                "source": "ochre_json",
-                "source_file": str(ochre_json),
-                "element_type": "missing_ochre_json",
-                "system_identifier": None,
-                "equipment_type": None,
-                "fuel": None,
-                "heating_capacity_btuh": None,
-                "heating_capacity_tons": None,
-                "heating_capacity_kw_thermal": None,
-                "cooling_capacity_btuh": None,
-                "cooling_capacity_tons": None,
-                "cooling_capacity_kw_thermal": None,
-                "backup_fuel": None,
-                "backup_system_type": None,
-                "backup_heating_capacity_btuh": None,
-                "backup_heating_capacity_tons": None,
-                "backup_heating_capacity_kw_thermal": None,
-                "compressor_type": None,
-                "annual_heating_efficiency_type": None,
-                "annual_heating_efficiency_value": None,
-                "annual_cooling_efficiency_type": None,
-                "annual_cooling_efficiency_value": None,
-                "analysis_class": "missing_ochre_json",
-                "read_error": None,
-            })
+            rows.append(
+                {
+                    "building_id": building_id,
+                    "upgrade": upgrade,
+                    "source": "ochre_json",
+                    "source_file": str(ochre_json),
+                    "element_type": "missing_ochre_json",
+                    "system_identifier": None,
+                    "equipment_type": None,
+                    "fuel": None,
+                    "heating_capacity_btuh": None,
+                    "heating_capacity_tons": None,
+                    "heating_capacity_kw_thermal": None,
+                    "cooling_capacity_btuh": None,
+                    "cooling_capacity_tons": None,
+                    "cooling_capacity_kw_thermal": None,
+                    "backup_fuel": None,
+                    "backup_system_type": None,
+                    "backup_heating_capacity_btuh": None,
+                    "backup_heating_capacity_tons": None,
+                    "backup_heating_capacity_kw_thermal": None,
+                    "compressor_type": None,
+                    "annual_heating_efficiency_type": None,
+                    "annual_heating_efficiency_value": None,
+                    "annual_cooling_efficiency_type": None,
+                    "annual_cooling_efficiency_value": None,
+                    "analysis_class": "missing_ochre_json",
+                    "read_error": None,
+                }
+            )
 
     metadata = pd.DataFrame(rows)
 
@@ -774,30 +843,18 @@ def main():
     print(metadata["source"].value_counts(dropna=False))
 
     print("\nRows by upgrade and element type:")
-    print(
-        metadata
-        .groupby(["upgrade", "element_type"])
-        .size()
-        .unstack(fill_value=0)
-    )
+    print(metadata.groupby(["upgrade", "element_type"]).size().unstack(fill_value=0))
 
     print("\nRows by upgrade and analysis class:")
-    print(
-        metadata
-        .groupby(["upgrade", "analysis_class"])
-        .size()
-        .unstack(fill_value=0)
-    )
+    print(metadata.groupby(["upgrade", "analysis_class"]).size().unstack(fill_value=0))
 
     print("\nHeat pump backup fuel counts from home.xml:")
     home_heat_pumps = metadata[
-        (metadata["source"] == "home_xml")
-        & (metadata["element_type"] == "HeatPump")
+        (metadata["source"] == "home_xml") & (metadata["element_type"] == "HeatPump")
     ]
     if len(home_heat_pumps) > 0:
         print(
-            home_heat_pumps
-            .groupby(["upgrade", "backup_fuel"])
+            home_heat_pumps.groupby(["upgrade", "backup_fuel"])
             .size()
             .unstack(fill_value=0)
         )
@@ -824,4 +881,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
